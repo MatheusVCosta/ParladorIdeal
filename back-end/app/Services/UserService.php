@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\User;
 use Exception;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 
 class UserService
@@ -22,14 +21,14 @@ class UserService
         return $this->user->fill($userArray);
     }
 
-    public function getUser()
+    public function findUser(int $userId): User
     {
-        
+        return $this->user->find($userId);
     }
 
     public function createUser(User $user): User
     {
-        if (empty($user) && is_a($user, User::class)) {
+        if (empty($user) && !is_a($user, User::class)) {
             throw new Exception("Error when create user");
         }
 
@@ -43,13 +42,35 @@ class UserService
         return $user;
     }
 
-    public function updateUser()
+    public function updateUser(Array $params, int $userId)
     {
+        $user = $this->findUser($userId);
 
+        if ((isset($params['email'])) && !$this->_verifyEmailExist($params['email'])) {
+            throw new Exception("Email already used");
+        }
+        
+        $user->fill($params);
+        $userUpdated = $user->update();
+
+        if (!$userUpdated) {
+            throw new Exception("User not updated");
+        }
+
+        return $user->only([
+            'name',
+            'email'
+        ]);
     }
 
-    public function deleteUser()
+    public function deleteUser(int $userId): bool
     {
+        $user = $this->findUser($userId);
+        return $user->delete();
+    }
 
+    private function _verifyEmailExist(string $email)
+    {
+        return $this->user->whereEmail($email)->count() < 1;
     }
 }

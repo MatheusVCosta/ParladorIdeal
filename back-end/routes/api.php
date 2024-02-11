@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,8 +22,18 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('/login', [AuthController::class,'login']);
+Route::post('/users', [UserController::class, 'store']);
 
 Route::middleware(['auth:sanctum'])->group(function ($api) {
-    $api->get('/users', [UserController::class, 'index']);
-    $api->post('/users', [UserController::class, 'store']);
+    
+    $api->put('/users/{userId}', [UserController::class, 'update']);
+    $api->delete('/users/{userId}', [UserController::class, 'destroy']);
+
+    //Create post
+    $api->post('/posts', [PostController::class, 'store']);
+    //My posts
+    $api->get('/posts/myPosts', [PostController::class, 'myPosts']);
+    $api->put('/posts/myPosts/{postId}', [PostController::class, 'update']);
+    $api->delete('/posts/myPosts/{postId}', [PostController::class, 'destroy']);
+
 });

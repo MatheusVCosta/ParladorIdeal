@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Validation\Validator as ValidatorMessage;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 use UserService;
 
 class UserController extends Controller
@@ -24,24 +25,23 @@ class UserController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * 
+     * @api /api/users
+     * 
+     * @method POST
      */
     public function store(Request $request)
     {
-        $params = $request->all();
-        $validator = Validator::make($params, [
+        $params = $this->_validateRequest($request, [
             'name'     => 'required|string',
             'email'    => 'required|email',
             'password' => 'required|',
         ]);
-
-        if ($validator->fails()) {
-            throw new Exception($validator->errors());
-        }
         
         $user = UserService::convertArrToObject($params);
         UserService::createUser($user);
         
-        return $params;
+        return $user;
     }
 
     /**
@@ -55,27 +55,55 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(int $userId, Request $request)
     {
-        //
+        if (!$userId) {
+            throw new Exception('User id not informed!');
+        }
+
+        $params = $this->_validateRequest($request, [
+            'name'  => 'string',
+            'email' => 'email'
+        ]);
+
+        $user = UserService::updateUser($params, $userId);
+        
+        return response()->json([
+            'message' => 'User updated with success',
+            'user'    => $user,
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(int $userId)
     {
-        //
+        if (!$userId) {
+            throw new Exception('User id not informed!');
+        }
+
+        $user = UserService::deleteUser($userId);
+        return response()->json([
+            'message' => 'User deleted with success'
+        ]);
     }
 
-    protected function failedValidation(ValidatorMessage $validator)
-    {   
-        $errors = $validator->errors();
-        
-        $response = new JsonResponse([
-            'errors' => $errors,
-        ], 422);
 
-        throw new HttpResponseException($response);
+    // PRIVATE METHODS
+
+    private function _validateRequest(Request $request, Array $rules)
+    {
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages([
+                'messages' => [
+                    $validator->errors()
+                ]
+            ]);
+        }
+
+        return $request->all();
     }
 }

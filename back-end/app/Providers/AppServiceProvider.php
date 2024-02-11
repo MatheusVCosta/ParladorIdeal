@@ -19,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
             return new UserService(new User);
         });
 
-        $this->app->bind('redirectlogservice', function () {
+        $this->app->bind('postservice', function () {
             return new PostService(new Post);
         });
     }
