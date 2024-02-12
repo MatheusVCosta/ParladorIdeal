@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\AuthRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Response\Response;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -12,6 +13,8 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    use Response;
+
     public function login(AuthRequest $request)
     {
         $user = User::where('email', $request->email)->first();
@@ -22,14 +25,13 @@ class AuthController extends Controller
             ]);
         }
 
-        // Logout others devices
-        // if ($request->has('logout_other_devices'))
         $user->tokens()->delete();
-
         $token = $user->createToken($request->email)->plainTextToken;
-
-        return response()->json([
-            'token' => $token
-        ]);
+        
+        $options = [
+            'message' => 'Token generate with success',
+            'token'   => $token
+        ];
+        return self::success(options: $options);
     }
 }

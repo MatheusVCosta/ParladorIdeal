@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Response\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -10,6 +11,7 @@ use PostService;
 
 class PostController extends Controller
 {
+    use Response;
     /**
      * Display a listing of the resource.
      */
@@ -20,17 +22,12 @@ class PostController extends Controller
         $currentUser = Auth::user();
         $posts = PostService::getAllPosts($currentUser->id);
         if (empty($posts)) {
-            return response()->json([
-                'message' => 'Nothing to show now'
-            ], 200);
+            return self::success(options: [
+                'message' => 'You no have posts published yet'
+            ]);
         }
 
-        return $posts->paginate(
-            10,
-            ['*'],
-            'page',
-            $page
-        );
+        return self::paginate($posts, $page);
     }
 
     /**
@@ -53,7 +50,15 @@ class PostController extends Controller
         ]);
         
         $post = PostService::convertArrToObject($params);
-        return PostService::createPost($post, $currentUser);
+        if (!PostService::createPost($post, $currentUser)) {
+            return self::error(options: [
+                'action' => 'store'
+            ]);
+        }
+        
+        return self::success(options: [
+            'message' => 'Post created with success'
+        ]);
     }
 
     /**
@@ -75,16 +80,14 @@ class PostController extends Controller
 
         $postUpdated = PostService::updatePost($request->about_post, $postId);
         if (!$postUpdated) {
-            return response()->json([
-                'type'    => "error",
-                'message' => "Error in realize update!"
+            return self::error(options: [
+                'action' => 'update'
             ]);
         }
 
-        return response()->json([
-            'type'    => "success",
-            'message' => "Success in update post"
-        ]);;
+        return self::success(options: [
+            'message' => 'Post updated with success'
+        ]);
     }
 
     /**
@@ -93,15 +96,13 @@ class PostController extends Controller
     public function destroy(int $postId)
     {
         if (!PostService::deletePost($postId)) {
-            return response()->json([
-                'type'    => "error",
-                'message' => "Error in delete post!"
+            return self::error(options: [
+                'action' => 'delete'
             ]);
         }
-        return response()->json([
-            'type'    => "success",
-            'message' => "Post delete with success"
-        ]);;
+        return self::success(options: [
+            'message' => 'Post deleted with success'
+        ]);
     }
 
     // PRIVATE METHODS
