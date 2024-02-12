@@ -6,8 +6,7 @@ use App\AuthRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Response\Response;
 use App\Models\User;
-use Exception;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -25,7 +24,6 @@ class AuthController extends Controller
             ]);
         }
 
-        $user->tokens()->delete();
         $token = $user->createToken($request->email)->plainTextToken;
         
         $options = [
@@ -33,5 +31,21 @@ class AuthController extends Controller
             'token'   => $token
         ];
         return self::success(options: $options);
+    }
+
+    public function logout()
+    {
+        $currentUser = Auth::user();
+        $currentUser = User::find($currentUser->id);
+        if (!empty($currentUser) || $currentUser->currentAccessToken()) {
+            return self::error(options: [
+                'message' => 'unauthenticated user'
+            ]);
+        }
+        $currentUser->tokens()->delete();
+
+        return self::success(options: [
+            'message' => 'User logged out'
+        ]);
     }
 }
