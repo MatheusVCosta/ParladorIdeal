@@ -20,15 +20,16 @@ class AuthController extends Controller
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect']
+                'message' => 'Email ou senha incorreto, por favor verifique!'
             ]);
         }
 
         $token = $user->createToken($request->email)->plainTextToken;
         
         $options = [
-            'message' => 'Token generate with success',
-            'token'   => $token
+            'message' => 'Login efetuado com sucesso',
+            'token'   => $token,
+            'user'    => $user->only(['email', 'name'])
         ];
         return self::success(options: $options);
     }

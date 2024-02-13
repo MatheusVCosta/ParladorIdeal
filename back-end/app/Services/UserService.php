@@ -26,10 +26,16 @@ class UserService
         return $this->user->find($userId);
     }
 
-    public function createUser(User $user): User
+    public function createUser(User $user): User| array
     {
         if (empty($user) && !is_a($user, User::class)) {
             throw new Exception("Error when create user");
+        }
+
+        if (!$this->_verifyEmailExist($user->email)) {
+            return [
+                'message' => 'Já existe um usuário registrado com esse email!'
+            ];
         }
 
         $user->password = Hash::make($user->password);

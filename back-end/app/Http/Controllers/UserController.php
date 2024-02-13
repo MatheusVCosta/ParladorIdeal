@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Response\Response;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -13,6 +15,7 @@ use UserService;
 
 class UserController extends Controller
 {
+    use Response;
     /**
      * Display a listing of the resource.
      * 
@@ -39,9 +42,14 @@ class UserController extends Controller
         ]);
         
         $user = UserService::convertArrToObject($params);
-        UserService::createUser($user);
+        $response = UserService::createUser($user);
+        if (is_array($response) && array_key_exists('message', $response)) {
+            return self::error(options: $response);
+        }
         
-        return $user;
+        return self::success(options: [
+            'message' => 'Usuário cadastrado com sucesso!'
+        ]);
     }
 
     /**

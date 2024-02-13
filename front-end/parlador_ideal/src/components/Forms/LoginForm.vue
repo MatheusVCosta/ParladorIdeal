@@ -64,7 +64,12 @@
                 email: "teste23@gmail.com",
                 password: '123',
                 tokenGenerated: "",
-                // t: authLogin()
+                auth: authLogin()
+            }
+        },
+        mounted() {
+            if (this.auth.currentUser() && this.auth.getToken()) {
+                this.$router.replace('/home')
             }
         },
         methods: {
@@ -75,12 +80,13 @@
                     'password' : this.password    
                 }
 
-                authLogin().login(params).then(res => {
+                this.auth.login(params).then(res => {
                     if (res.status >= 200 || res.status <= 300) {
                         alert(res.data.message)
                         this.$router.replace('/home')
                     }
                 }).catch(error => {
+                    console.log(error)
                     alert(error.response.data.message)
                 })
             }
