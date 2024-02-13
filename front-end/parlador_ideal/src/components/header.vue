@@ -3,7 +3,6 @@
             flex
             justify-center
             fixed 
-            max-w-lg
             w-full
             bg-orange-400
             ">

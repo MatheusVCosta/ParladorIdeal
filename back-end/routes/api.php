@@ -29,10 +29,10 @@ Route::middleware(['auth:sanctum'])->group(function ($api) {
     $api->put('/users/{userId}', [UserController::class, 'update']);
     $api->delete('/users/{userId}', [UserController::class, 'destroy']);
 
-    //Create post
+    $api->get('/posts', [PostController::class, 'showPosts']);
     $api->post('/posts', [PostController::class, 'store']);
+    
     //My posts
-    $api->get('/posts/myPosts', [PostController::class, 'myPosts']);
     $api->put('/posts/myPosts/{postId}', [PostController::class, 'update']);
     $api->delete('/posts/myPosts/{postId}', [PostController::class, 'destroy']);
 

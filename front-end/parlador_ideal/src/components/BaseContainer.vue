@@ -2,9 +2,8 @@
     <section>
         <div class="
       flex 
-      w-screen
-      h-screen
-      container
+      w-full
+      h-full
       mx-auto">
         <slot/>
       </div>

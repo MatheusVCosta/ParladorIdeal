@@ -15,27 +15,20 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function myPosts(Request $request)
+    public function showPosts(Request $request)
     {
         $page = $request->input('page', 1);
-
+        $myPosts = $request->input('myPosts', false);
         $currentUser = Auth::user();
-        $posts = PostService::getAllPosts($currentUser->id);
+
+        $posts = PostService::getAllPosts($currentUser->id, $myPosts);
         if (empty($posts)) {
             return self::success(options: [
-                'message' => 'You no have posts published yet'
+                'message' => 'Nenhum publicação encontrada.'
             ]);
         }
 
         return self::paginate($posts, $page);
-    }
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function showPosts()
-    {
-        
     }
 
     /**
@@ -57,7 +50,7 @@ class PostController extends Controller
         }
         
         return self::success(options: [
-            'message' => 'Post created with success'
+            'message' => 'Post publicado em sua home.'
         ]);
     }
 

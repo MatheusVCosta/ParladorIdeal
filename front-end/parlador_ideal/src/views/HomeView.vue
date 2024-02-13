@@ -3,15 +3,19 @@
         class="
         flex 
         flex-col
-        w-screen">
+        w-full">
         <headerHome></headerHome>
     
         <div  class="
             flex 
             flex-col
-            mx-auto
-            mt-32
+            p-8
+            mt-20
             ">
+            <div v-if="typeof postsData.data == 'undefined'">
+                {{ postsData.message }}
+            </div>
+            
             <div v-for="(post, i) in postsData.data" :key="i">
                 <card :post="post"></card>
             </div>
@@ -49,8 +53,6 @@
                 await this.request.getPost().then(res => {
                     this.postsData = res.data
                 })
-
-                console.log(this.postsData)
 
             }
         }

@@ -50,7 +50,7 @@
             </span>
             
         </div>
-        <button @click="sendForm" class="bg-orange-400 text-white p-3 rounded-lg">Login</button>
+        <button @touchstart.prevent="sendForm" class="bg-orange-400 text-white p-3 rounded-lg">Login</button>
     </form>
 </template>
 
@@ -69,7 +69,7 @@
         },
         methods: {
             async sendForm(event) {
-                event.preventDefault()
+                // alert('oi')
                 let params = {
                     'email' : this.email,
                     'password' : this.password    
@@ -81,8 +81,8 @@
                         this.$router.replace('/home')
                     }
                 }).catch(error => {
-                    console.log(error)
-                    alert(error.response.data.message)
+                    // alert(error)
+                    // alert(error.response.data.message)
                 })
             }
         }

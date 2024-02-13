@@ -8,7 +8,7 @@
                 <span class="sr-only">Home</span>
             </button>
 
-            <div class="flex items-center justify-center">
+            <div class="flex items-center justify-center" @touchstart.prevent="openNewPost">
                 <button type="button" class="inline-flex items-center justify-center w-10 h-10 font-medium bg-orange-400 rounded-full">
                     <svg class="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
@@ -26,3 +26,13 @@
         </div>
     </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    openNewPost() {
+        this.$router.push({name: 'post'})
+    }
+  }
+}
+</script>

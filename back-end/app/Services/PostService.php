@@ -22,16 +22,14 @@ class PostService
         return $this->post->fill($postArray);
     }
 
-    public function getAllPosts(int $userId = null)
+    public function getAllPosts(int $userId = null, $myPosts = false)
     {
+        $operator = $myPosts ? "=": "<>";
         $query = $this->post->query();
-        
-        if (!empty($userId)) {
-            $query->where('user_id', $userId);
-        }
-
+        $query->where('user_id', $operator, $userId);
         $query->with('user');
         $query->orderByDesc('created_at');
+        
         if ($query->count() >= 1) {
             return $query;
         }
