@@ -29,10 +29,16 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: '/my_post',
+      name: 'mypost',
+      component: HomeView,
+    },
+    {
       path: '/post',
       name: 'post',
       component: PostView,
     },
+    
   ]
 })
 

@@ -38,15 +38,37 @@ export const request = function () {
     async function createPost(params) {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + getToken();
         try {
-            return await axios.post('/createPosts', params).then(res => {
+            return await axios.post('/posts', params).then(res => {
                 return res
             })
         }
         catch (error) {
             alert(error)
         }
-        
+    }
 
+    async function updatePost(params) {
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + getToken();
+        try {
+            return await axios.put('/posts', params).then(res => {
+                return res
+            })
+        }
+        catch (error) {
+            alert(error)
+        }
+    }
+
+    async function deletePost(params) {
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + getToken();
+        try {
+            return await axios.delete('/posts').then(res => {
+                return res
+            })
+        }
+        catch (error) {
+            alert(error)
+        }
     }
 
     function currentUser() {
@@ -68,6 +90,7 @@ export const request = function () {
         isAuthenticated,
         
         getPost,
+        getMyPosts,
         createPost
     }
 
