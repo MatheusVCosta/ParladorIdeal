@@ -55,7 +55,7 @@
 </template>
 
 <script>
-    import { authLogin } from '@/auth/login'
+    import { request } from '@/http/request'
 
     export default {
         name: 'LoginForm',
@@ -64,12 +64,7 @@
                 email: "teste23@gmail.com",
                 password: '123',
                 tokenGenerated: "",
-                auth: authLogin()
-            }
-        },
-        mounted() {
-            if (this.auth.currentUser() && this.auth.getToken()) {
-                this.$router.replace('/home')
+                request: request()
             }
         },
         methods: {
@@ -80,7 +75,7 @@
                     'password' : this.password    
                 }
 
-                this.auth.login(params).then(res => {
+                this.request.login(params).then(res => {
                     if (res.status >= 200 || res.status <= 300) {
                         alert(res.data.message)
                         this.$router.replace('/home')

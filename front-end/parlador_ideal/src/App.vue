@@ -2,7 +2,7 @@
   <main>
    <BaseContainer class="justify-center">
     <SplashScreen v-if="showSplashScreen"/>
-    <router-view></router-view>
+    <router-view v-else></router-view>
   </BaseContainer>
   </main>
 </template>
@@ -10,6 +10,7 @@
 <script>
 import SplashScreen from './components/SplashScreen.vue';
 import BaseContainer from './components/BaseContainer.vue';
+
 export default {
   name: 'App',
   components: {
@@ -23,23 +24,10 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.path == "/") {
-      setTimeout(() => {    
-        this.showSplashScreen = false;
-      }, 2000);
-    }
-    this.showSplashScreen = false;
-    this.loadFirstScreen()
+    setTimeout(() => {    
+      this.showSplashScreen = false;
+    }, 2000);
+    
   },
-  methods: {
-    loadFirstScreen: function() {
-      if (this.userAuthenticated) {
-          this.$router.replace('/register')
-      }
-      else {
-        this.$router.replace('/login')
-      }
-    }
-  }
 }
 </script>
