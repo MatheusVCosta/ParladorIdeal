@@ -21,19 +21,20 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
-Route::post('/login', [AuthController::class,'login']);
+Route::post('/login', [AuthController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']);
 
 Route::middleware(['auth:sanctum'])->group(function ($api) {
-    
+    $api->post('/logout', [AuthController::class, 'logout']);
+
     $api->put('/users/{userId}', [UserController::class, 'update']);
     $api->delete('/users/{userId}', [UserController::class, 'destroy']);
 
     $api->get('/posts', [PostController::class, 'showPosts']);
     $api->post('/posts', [PostController::class, 'store']);
-    
+
     //My posts
+    $api->get('/posts/myPost/{postId}', [PostController::class, 'show']);
     $api->put('/posts/myPosts/{postId}', [PostController::class, 'update']);
     $api->delete('/posts/myPosts/{postId}', [PostController::class, 'destroy']);
-
 });

@@ -22,11 +22,31 @@ class PostService
         return $this->post->fill($postArray);
     }
 
-    public function getAllPosts(int $userId = null, $myPosts = false)
+    public function getPosts(int $userId = null, bool $myPosts = false, int $postId = null)
     {
         $operator = $myPosts ? "=": "<>";
         $query = $this->post->query();
+        if (is_int($postId) && !empty($postId)) {
+            $query->where('id', $postId);    
+        }
+
         $query->where('user_id', $operator, $userId);
+        $query->with('user');
+        $query->orderByDesc('created_at');
+        
+        if ($query->count() >= 1) {
+            return $query;
+        }
+
+        return [];
+        
+    }
+
+    public function getMyPost(int $userId, int $postId)
+    {
+        $query = $this->post->query();
+        $query->where('id', $postId);    
+        $query->where('user_id', $userId);
         $query->with('user');
         $query->orderByDesc('created_at');
         

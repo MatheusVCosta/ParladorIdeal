@@ -17,18 +17,20 @@ class PostController extends Controller
      */
     public function showPosts(Request $request)
     {
-        $page = $request->input('page', 1);
+        $page    = $request->input('page', 1);
         $myPosts = $request->input('myPosts', false);
+        $postId  = (int) $request->input('postId', 0);
+
         $currentUser = Auth::user();
 
-        $posts = PostService::getAllPosts($currentUser->id, $myPosts);
+        $posts = PostService::getPosts($currentUser->id, $myPosts, $postId);
         if (empty($posts)) {
             return self::success(options: [
                 'message' => 'Nenhum publicação encontrada.'
             ]);
         }
 
-        return self::paginate($posts, $page);
+        return self::success(options: ['data' => $posts->get()]);
     }
 
     /**
@@ -57,9 +59,18 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(int $postId)
     {
-        //
+        $currentUser = Auth::user();
+
+        $posts = PostService::getMyPost($currentUser->id, $postId);
+        if (empty($posts)) {
+            return self::success(options: [
+                'message' => 'Nenhum publicação encontrada.'
+            ]);
+        }
+
+        return self::success(options: ['data' => $posts->first()]);
     }
 
     /**
@@ -79,7 +90,7 @@ class PostController extends Controller
         }
 
         return self::success(options: [
-            'message' => 'Post updated with success'
+            'message' => 'Seu Post Foi Atualizado'
         ]);
     }
 
@@ -94,7 +105,7 @@ class PostController extends Controller
             ]);
         }
         return self::success(options: [
-            'message' => 'Post deleted with success'
+            'message' => 'Post Deletado'
         ]);
     }
 

@@ -36,9 +36,8 @@ class AuthController extends Controller
 
     public function logout()
     {
-        $currentUser = Auth::user();
-        $currentUser = User::find($currentUser->id);
-        if (!empty($currentUser) || $currentUser->currentAccessToken()) {
+        $currentUser = Auth::user(); 
+        if (empty($currentUser) || !$currentUser->currentAccessToken()->token) {
             return self::error(options: [
                 'message' => 'unauthenticated user'
             ]);
