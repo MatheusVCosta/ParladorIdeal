@@ -6,7 +6,9 @@
             p-6
             mb-5
             bg-orange-400
-            ">
+            "
+            @click="editPost"    
+        >
 
         <h5 class="
             mb-2 
@@ -27,10 +29,11 @@
 </template>
 
 <script>
-    import { format } from 'date-fns'
+
     export default {
         props: {
-            post: ''
+            post: {},
+            modeEdited: false
         },
         methods: {
             formatDate(postDate) {
@@ -44,6 +47,15 @@
 
                 return `${day}/${month}/${year} ${hour}:${minutes}:${seconds}`;
 
+            },
+            editPost(event) {
+                event.preventDefault()
+                if (this.modeEdited) {
+                    this.$router.push({name: 'post', query: {mode: 'edit', postId: this.post.id}})
+                }
+                else {
+                    return false
+                }
             }
         }
     }

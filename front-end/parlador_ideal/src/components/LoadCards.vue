@@ -5,7 +5,7 @@
             {{ postsData.message }}
         </div>
         <div v-for="(post, i) in postsData.data" :key="i">
-            <card :post="post"></card>
+            <card :post="post" :modeEdited="mypost"></card>
         </div>
     </div>
 </template>
@@ -33,6 +33,8 @@
             }
         },
         created() {
+            this.mypost = this.action == "mypost" ? true : false
+            this.titlePage = this.mypost ?  "Minhas publicações" : 'Ultimas publicações'
             this.getPosts(this.mypost)
         },
         watch: {
@@ -44,8 +46,7 @@
         },  
         methods: {
             async getPosts(mypost = false) {
-                this.postsData = {}
-                
+
                 if (mypost) {
                     return await this.request.getMyPosts().then(res => {
                         this.postsData = res.data

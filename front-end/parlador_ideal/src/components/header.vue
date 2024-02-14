@@ -1,11 +1,13 @@
 <template>
     <div  class="
             flex
-            justify-center
+            justify-between
             fixed 
             w-full
             bg-orange-400
             ">
+            
+            
             <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="120" height="80" viewBox="0 0 120 120">
                 <svg viewBox="0 0 129.99874877929688 135.00021362304688" width="75" height="75" style="fill: rgb(250, 250, 250);" x="22.5" y="22.5">
                     <svg width="131" height="130" viewBox="0 0 131 130" xmlns="http://www.w3.org/2000/svg">
@@ -17,5 +19,31 @@
                     </svg>
                 </svg>
             </svg>
+            <div class="flex items-center mr-10">
+                <button 
+                    @click="logout2"
+                    class="bg-white w-20 h-12 text-orange-400 rounded-lg">
+                    Sair
+                </button>
+            </div>
         </div>
 </template>
+
+<script>
+    import { request } from '@/http/request'
+
+    export default {
+        data() {
+            return {
+                request: request(),
+            }
+        },
+        methods: {
+            logout2() {
+                this.request.logout().then(res => {
+                    this.$router.replace({name: 'login'})
+                })
+            }
+        }
+    }
+</script>

@@ -22,10 +22,16 @@ export const useAuthStore = defineStore('auth', () => {
         return JSON.parse(localStorage.getItem('user'))
     }
 
+    function clearTokenAndUser() {
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+    }
+
     return {
         setToken,
         getToken,
         setUser,
-        getUser
+        getUser,
+        clearTokenAndUser
     }
 })

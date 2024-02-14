@@ -3,7 +3,10 @@ import { useAuthStore } from '@/store/authStore'
 
 export const request = function () {
     const auth = useAuthStore()
-    axios.defaults.baseURL = 'http://192.168.1.12:8000/api';
+    // axios.defaults.baseURL = 'http://192.168.1.12:8000/api';
+    axios.defaults.baseURL = 'http://localhost:8000/api';
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + getToken();
+    axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
     async function login(authData) {
         try {
@@ -12,15 +15,23 @@ export const request = function () {
                 auth.setUser(res.data.user)
                 return res
             })
-        }catch (error) {
+        } catch (error) {
             alert(error)
-        } 
-        
+        }
+    }
 
+    async function logout() {
+        try {
+            return await axios.post('/logout').then(res => {
+                auth.clearTokenAndUser()
+                return res
+            })
+        } catch (error) {
+            alert(error)
+        }
     }
 
     async function getPost() {
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + getToken();
         return await axios.get('/posts').then(res => {
             return res
         })
@@ -28,15 +39,20 @@ export const request = function () {
     }
 
     async function getMyPosts() {
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + getToken();
         return await axios.get('/posts?myPosts=true').then(res => {
             return res
         })
 
     }
 
+    async function getMyPost(postId) {
+        return await axios.get("/posts/myPost/" + postId).then(res => {
+            return res
+        })
+
+    }
+
     async function createPost(params) {
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + getToken();
         try {
             return await axios.post('/posts', params).then(res => {
                 return res
@@ -47,10 +63,10 @@ export const request = function () {
         }
     }
 
-    async function updatePost(params) {
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + getToken();
+    async function updatePost(params, postId) {
         try {
-            return await axios.put('/posts', params).then(res => {
+            console.log(params)
+            return await axios.put('/posts/myPosts/' + postId, params).then(res => {
                 return res
             })
         }
@@ -59,10 +75,9 @@ export const request = function () {
         }
     }
 
-    async function deletePost(params) {
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + getToken();
+    async function deletePost(postId) {
         try {
-            return await axios.delete('/posts').then(res => {
+            return await axios.delete('/posts/myPosts/' + postId).then(res => {
                 return res
             })
         }
@@ -80,18 +95,22 @@ export const request = function () {
     }
 
     function isAuthenticated() {
-        return !!(currentUser()  && getToken())
+        return !!(currentUser() && getToken())
     }
 
     return {
         login,
+        logout,
         currentUser,
         getToken,
         isAuthenticated,
-        
+
         getPost,
         getMyPosts,
-        createPost
+        getMyPost,
+        createPost,
+        updatePost,
+        deletePost
     }
 
 }
