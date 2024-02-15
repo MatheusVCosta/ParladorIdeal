@@ -114,7 +114,7 @@
                 }
 
                 await axios.post(
-                    'http://localhost:8000/api/users', 
+                    `${import.meta.env.VITE_BACKEND_URL}/users`,
                     params
                 ).then(res => {
                     if (res.status >= 200 || res.status <= 300) {

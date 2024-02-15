@@ -1,0 +1,42 @@
+volumes:
+  node_modules:
+  db_data:
+services:
+  frontend:
+    build: 
+      context: ./front-end
+    volumes:
+      - ./front-end:/app
+      - node_modules:/app/node_modules
+    ports:
+      - 5173:5173
+    environment:
+      - VITE_BACKEND_URL=http://localhost:8181/api
+  backend:
+    build: 
+      context: ./back-end
+    ports:
+      - 8181:8181
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=parlador
+      - DB_USERNAME=root
+      - DB_PASSWORD=parlador
+      - APP_ENV=local
+
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=parlador
+      - MYSQL_DATABASE=parlador
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 20
