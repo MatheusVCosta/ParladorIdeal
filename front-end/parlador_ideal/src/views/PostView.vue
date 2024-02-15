@@ -41,9 +41,11 @@
                         block 
                         p-5
                         w-full 
-                        h-96
+                        h-5/6
+                        min-h-96
                         text-sm 
                         rounded-lg
+                        resize-none
                         text-gray-500 
                         bg-orange-100">
                 </textarea>
@@ -92,7 +94,7 @@
             async createNewPost(event) {
                 event.preventDefault()
                 console.log(this.postText)
-                if (!this.postText) {
+                if (!this.postText.about_post) {
                     alert('Escreve sobre algo para publicar')
                     return
                 }
@@ -100,7 +102,7 @@
                 let params = {about_post: this.postText.about_post}
                 await this.request.createPost(params).then(res => {
                     alert(res.data.message)
-                    this.$router.push({name: 'home'})
+                    this.$router.push({name: 'mypost'})
                 })
             },
             async editPost(event) {
@@ -114,14 +116,14 @@
 
                 await this.request.updatePost(params, this.postId).then(res => {
                     alert(res.data.message)
-                    this.$router.push({name: 'home'})
+                    this.$router.push({name: 'mypost'})
                 })
             },
             async deletePost(event) {
                 event.preventDefault()
                 await this.request.deletePost(this.postId).then(res => {
                     alert(res.data.message)
-                    this.$router.push({name: 'home'})
+                    this.$router.push({name: 'mypost'})
                 })
             }
         }

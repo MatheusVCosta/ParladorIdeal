@@ -1,6 +1,7 @@
 <template>
     <div 
         class="
+        mx-auto
         flex 
         flex-col
         items-center

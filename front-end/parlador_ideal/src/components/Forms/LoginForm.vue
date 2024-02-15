@@ -1,5 +1,6 @@
 <template>
-    <form 
+    <div>
+        <form 
     class="
     flex
     flex-col
@@ -27,7 +28,7 @@
                     " placeholder="email@exemple.com" required>
         </div>
         <div class="mb-4">
-            <label for="password" class="block mb-2 text-sm font-medium text-orange-400">Password</label>
+            <label for="password" class="block mb-2 text-sm font-medium text-orange-400">Senha</label>
         <input 
             type="password" 
             id="password" 
@@ -41,7 +42,7 @@
                 focus:ring-blue-500 
                 focus:border-blue-500 
                 block w-full p-2.5"
-                placeholder="Password"
+                placeholder="Senha"
                 required>
         </div>
         <div class="mb-10 self-center">
@@ -50,39 +51,75 @@
             </span>
             
         </div>
-        <button @touchstart.prevent="sendForm" class="bg-orange-400 text-white p-3 rounded-lg">Login</button>
+        <button @click="sendForm" class="bg-orange-400 text-white p-3 rounded-lg">Login</button>
     </form>
+
+    <openModal 
+        :activate="showModalBool" 
+        :message="messageModal"
+        :messageArr="messageModalArr"
+        :onModalName="modalName"
+        @closeModal="modal"
+    />
+    
+    </div>
 </template>
 
 <script>
     import { request } from '@/http/request'
+    import openModal from '@/components/Modal/ModalSuccess.vue'
 
     export default {
         name: 'LoginForm',
+        components: {
+            openModal
+        },
         data() {
             return {
-                email: "teste23@gmail.com",
-                password: '123',
+                email: "",
+                password: '',
                 tokenGenerated: "",
-                request: request()
+                request: request(),
+                messageModal: '',
+                messageModalArr: [],
+                showModalBool: false,
+                modalName: ''
             }
         },
         methods: {
+            modal(activate) {           
+                this.showModalBool = activate
+            },
+            redirectToHome(message) {
+                this.$router.push({name: 'home', query: {sendMessage: message, modalName: 'success', activate: true}})
+            },
             async sendForm(event) {
-                // alert('oi')
+                event.preventDefault()
                 let params = {
                     'email' : this.email,
                     'password' : this.password    
                 }
 
                 this.request.login(params).then(res => {
+
                     if (res.status >= 200 || res.status <= 300) {
-                        alert(res.data.message)
-                        this.$router.replace('/home')
+                        this.redirectToHome(res.data.message)
                     }
+
                 }).catch(error => {
-                    // alert(error)
-                    // alert(error.response.data.message)
+
+                    if (!!error.response.data.errors) {
+                        this.messageModalArr= []
+                        Object.entries(error.response.data.errors).forEach(error => {
+                            this.messageModalArr.push(error[1][0])
+                        });
+                        
+                    }else {
+                        this.messageModal = error.response.data.message
+                    }
+                    
+                    this.modal(true)
+                    this.modalName = 'error'
                 })
             }
         }

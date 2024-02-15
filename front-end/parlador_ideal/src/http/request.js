@@ -9,6 +9,8 @@ export const request = function () {
     axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
     async function login(authData) {
+        var responseError
+
         try {
             return await axios.post('/login', authData).then(res => {
                 auth.setToken(res.data.token)
@@ -16,8 +18,11 @@ export const request = function () {
                 return res
             })
         } catch (error) {
-            alert(error)
+            responseError = error
+            throw error
         }
+
+        // return responseError
     }
 
     async function logout() {
@@ -27,7 +32,7 @@ export const request = function () {
                 return res
             })
         } catch (error) {
-            alert(error)
+            return error
         }
     }
 
@@ -59,7 +64,7 @@ export const request = function () {
             })
         }
         catch (error) {
-            alert(error)
+            return error
         }
     }
 
@@ -71,7 +76,7 @@ export const request = function () {
             })
         }
         catch (error) {
-            alert(error)
+            return error
         }
     }
 
@@ -82,7 +87,7 @@ export const request = function () {
             })
         }
         catch (error) {
-            alert(error)
+            return error
         }
     }
 

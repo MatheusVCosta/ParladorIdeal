@@ -1,9 +1,10 @@
 <template> 
     <div class="
-    container
     w-screen
     h-screen
-    flex flex-col justify-center  items-center
+    flex 
+    justify-center  
+    items-center
     ">
         <div>
             <img src="../../public/logo/default_transparent_765x625.png" alt="">

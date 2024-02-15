@@ -39,7 +39,16 @@ class UserController extends Controller
             'name'     => 'required|string',
             'email'    => 'required|email',
             'password' => 'required|',
-        ]);
+        ],
+        [
+            'name.required' => "Nome é obrigatório",
+            'name.string'   => "Nome precisa ser um texto",
+            'email.required'=> "Email é obrigatório",
+            'email.email'   => "Formato de email invalido",
+            'password.required' => "Senha é obrigatório",
+        ]
+    
+        );
         
         $user = UserService::convertArrToObject($params);
         $response = UserService::createUser($user);
@@ -100,15 +109,13 @@ class UserController extends Controller
 
     // PRIVATE METHODS
 
-    private function _validateRequest(Request $request, Array $rules)
+    private function _validateRequest(Request $request, Array $rules, $messages)
     {
-        $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $rules, $messages);
 
         if ($validator->fails()) {
             throw ValidationException::withMessages([
-                'messages' => [
-                    $validator->errors()
-                ]
+                $validator->errors()
             ]);
         }
 

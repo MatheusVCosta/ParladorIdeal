@@ -32,4 +32,19 @@ class AuthRequest extends FormRequest
             ]
         ];
     }
+
+    /**
+     * Get the validation message that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function messages(): array
+    {
+        return [
+            'email.required' => "E-mail não informado",
+            'email.email'    => "Formato de e-mail invalido",
+            'email.max:255'  => "Tamanho de e-mail invalido",
+            'password.required' => "Senha não informada",
+        ];
+    }
 }

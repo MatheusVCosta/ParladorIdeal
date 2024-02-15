@@ -11,7 +11,8 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: '',
+      name: 'index',
+      component: LoginView
     },
     {
       path: '/login',
@@ -42,18 +43,21 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  const req = request()
-  if ((to.path === '/' || to.path === '/home') && !req.isAuthenticated()) {
-    next({ name: 'login'})
-  }
-  else if ((to.path === '/login' || to.path === '/register') && req.isAuthenticated()) {
-    next({ name: 'home'})
-  }
-  else {
-    next()
-  }
+// router.beforeEach((to, from, next) => {
+//   const req = request()
+//   console.log(to.name)
+//   if ((to.name === 'index' || to.path === '/home') ) {
+//     console.log(to.name)
+//     next({ name: 'login'})
+//     return
+//   }
+//   else if ((to.path === '/login' || to.path === '/register') && req.isAuthenticated()) {
+//     next({ name: 'home'})
+//   }
+//   else {
+//     next()
+//   }
   
-})
+// })
 
 export default router

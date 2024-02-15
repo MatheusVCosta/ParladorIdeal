@@ -1,10 +1,11 @@
 <template>
     <div 
         class="
+        mx-auto
         flex 
         flex-col
         items-center
-        justify-around
+        justify-center
         "
     >
     <img src="../../public/logo/default_transparent_765x625.png" alt="">
