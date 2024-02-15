@@ -2,6 +2,6 @@ from node:19
 
 WORKDIR /app
 
-COPY package*.json .
+COPY package*.json ./
 RUN npm install
 CMD [ "npm", "run", "dev" ]
