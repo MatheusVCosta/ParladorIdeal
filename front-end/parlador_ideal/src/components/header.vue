@@ -19,31 +19,12 @@
                     </svg>
                 </svg>
             </svg>
-            <div class="flex items-center mr-10">
+            <div class="flex items-center mr-10" v-if="this.$route.name != 'post'">
                 <button 
-                    @click="logout2"
+                    @click="this.$emit('logout', true)"
                     class="bg-white w-20 h-12 text-orange-400 rounded-lg">
                     Sair
                 </button>
             </div>
         </div>
 </template>
-
-<script>
-    import { request } from '@/http/request'
-
-    export default {
-        data() {
-            return {
-                request: request(),
-            }
-        },
-        methods: {
-            logout2() {
-                this.request.logout().then(res => {
-                    this.$router.replace({name: 'login'})
-                })
-            }
-        }
-    }
-</script>

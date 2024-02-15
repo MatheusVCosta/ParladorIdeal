@@ -4,11 +4,11 @@
             <div class="relative p-4 w-full max-w-md max-h-full">
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     
-                    <button @click="activate=false" type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="success">
+                    <!-- <button @click="activate=false" type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="success">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                         </svg>
-                    </button>
+                    </button> -->
 
                     <div class="p-4 md:p-5 text-center">
                         <svg class="mx-auto mb-4 text-green-400 w-12 h-12 " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -27,11 +27,11 @@
             <div class="relative p-4 w-full max-w-md max-h-full">
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     
-                    <button @click="activate=false" type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="error">
+                    <!-- <button @click="activate=false" type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="error">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                         </svg>
-                    </button>
+                    </button> -->
 
                     <div class="p-4 md:p-5 text-center">
                         <svg class="mx-auto mb-4 text-red-400 w-12 h-12 " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -73,10 +73,10 @@
                         </h3>
                        
                         
-                        <button data-modal-hide="question" type="button" class="text-white bg-orange-400 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                        <button @click="this.$emit('responseModal', true)" data-modal-hide="question" type="button" class="text-white bg-orange-400 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
                             Sim
                         </button>
-                        <button data-modal-hide="question" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-white bg-red-700 rounded-lg  ">
+                        <button @click="this.$emit('responseModal', false)" data-modal-hide="question" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-white bg-red-700 rounded-lg  ">
                             Não
                         </button>
                     </div>
@@ -109,13 +109,15 @@ export default {
             }
             else {
                 this.closeModal()
-            }
-                
+            }       
         }
     },
     methods: {
         openModal() {
-            newModal(this.onModalName).showModal()
+            if (this.onModalName) {
+                newModal(this.onModalName).showModal()
+            }
+            
         },
         closeModal() {
             newModal(this.onModalName).closeModal()

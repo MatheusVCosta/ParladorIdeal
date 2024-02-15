@@ -52,12 +52,20 @@
             </form>
             <navMenu class="w-3/5"></navMenu>
         </div>
+        <openModal 
+            :activate="showModalBool" 
+            :message="messageModal"
+            :onModalName="modalName"
+            @closeModal="close"
+            @responseModal="responseModal"
+        />
     </div>
 </template>
 
 <script>
     import navMenu from '@/components/navBottomMenu.vue'
     import headerHome from '@/components/header.vue'
+    import openModal from '@/components/Modal/ModalSuccess.vue'
 
     import { request } from '@/http/request'
 
@@ -65,7 +73,8 @@
         name: 'HomeView',
         components: {
             navMenu,
-            headerHome
+            headerHome,
+            openModal
         },
         data() {
             return {
@@ -76,6 +85,10 @@
                 request: request(),
                 mode: 'create',
                 postId: '',
+                messageModal: '',
+                messageModalArr: [],
+                showModalBool: false,
+                modalName: ''
             }
         },
         created() {
@@ -93,38 +106,77 @@
             },
             async createNewPost(event) {
                 event.preventDefault()
-                console.log(this.postText)
+                
                 if (!this.postText.about_post) {
-                    alert('Escreve sobre algo para publicar')
+                    this.messageModal  = "Escreve sobre algo para publicar!"
+                    this.modalName     = "error"
+                    this.showModalBool = true
+                    setTimeout(() => {
+                        this.showModalBool = false
+                    }, 2000)
                     return
                 }
 
                 let params = {about_post: this.postText.about_post}
                 await this.request.createPost(params).then(res => {
-                    alert(res.data.message)
-                    this.$router.push({name: 'mypost'})
+                    this.messageModal  = res.data.message
+                    this.modalName     = "success"
+                    this.showModalBool = true
+                    setTimeout(() => {
+                        this.showModalBool = false
+                        this.$router.push({name: 'mypost'})
+                    }, 2000)
+                    
                 })
             },
             async editPost(event) {
                 event.preventDefault()
-                if (!this.postText) {
-                    alert('O post não pode ser vazio')
+                if (!this.postText.about_post) {
+                    this.messageModal  = "O post não pode ser vazio!"
+                    this.modalName     = "error"
+                    this.showModalBool = true
+
+                    setTimeout(() => {
+                        this.showModalBool = false
+                    }, 2000)
                     return
                 }
 
                 let params = {about_post: this.postText.about_post}
 
                 await this.request.updatePost(params, this.postId).then(res => {
-                    alert(res.data.message)
-                    this.$router.push({name: 'mypost'})
+                    this.messageModal  = res.data.message
+                    this.modalName     = "success"
+                    this.showModalBool = true
+                    setTimeout(() => {
+                        this.showModalBool = false
+                        this.$router.push({name: 'mypost'})
+                    }, 2000)
                 })
             },
             async deletePost(event) {
                 event.preventDefault()
-                await this.request.deletePost(this.postId).then(res => {
-                    alert(res.data.message)
-                    this.$router.push({name: 'mypost'})
-                })
+                this.messageModal  = 'Deseja remover este post?'
+                this.modalName     = "question"
+                this.showModalBool = true
+                
+            },
+            close(close) {
+                this.showModalBool = close
+            },
+            responseModal(response) {
+                if (response) {
+                    this.request.deletePost(this.postId).then(res => {
+                        this.messageModal  = res.data.message
+                        this.modalName     = "success"
+                        this.showModalBool = true
+                        setTimeout(() => {
+                            this.showModalBool = false
+                            this.$router.push({name: 'mypost'})
+                        }, 2000)
+                    })
+                }
+                this.showModalBool = false
             }
         }
     }

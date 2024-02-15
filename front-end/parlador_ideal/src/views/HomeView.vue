@@ -4,7 +4,7 @@
         flex 
         flex-col
         w-full">
-        <headerHome></headerHome>
+        <headerHome @logout="makeLogout"/>
     
         <div  class="flex flex-col p-8 mt-20">
             <loadCard :action="this.$route.name"></loadCard>
@@ -14,12 +14,14 @@
             :activate="showModalBool" 
             :message="messageModal"
             :onModalName="modalName"
-            @closeModal="showModalBool"
+            @closeModal="close"
+            @responseModal="responseModal"
         />
     </div>
 </template>
 
 <script>
+    import { request } from '@/http/request'
     import navMenu from '@/components/navBottomMenu.vue'
     import headerHome from '@/components/header.vue'
     import loadCard from '@/components/LoadCards.vue'
@@ -35,6 +37,7 @@
         },
         data() {
             return {
+                request: request(),
                 postsData: {},
                 messageModal: '',
                 messageModalArr: [],
@@ -43,9 +46,31 @@
             }
         },
         mounted() {
-            this.messageModal = this.$route.query.sendMessage
-            this.modalName = this.$route.query.modalName
-            this.showModalBool = this.$route.query.activate
+            if (!!this.$route.query.sendMessage) {
+                this.messageModal = this.$route.query.sendMessage
+                this.modalName = this.$route.query.modalName
+                this.showModalBool = this.$route.query.activate
+            }
+            
+        },
+        methods: {
+            makeLogout() {
+                this.messageModal  = "Deseja sair?"
+                this.modalName     = "question"
+                this.showModalBool = true
+            },
+            close(close) {
+                this.showModalBool = close
+            },
+            responseModal(response) {
+                if (response) {
+                    this.request.logout().then(res => {
+                        this.$router.replace({name: 'login'})
+                    })
+                }
+                this.showModalBool = false
+            }
         }
+        
     }
 </script>

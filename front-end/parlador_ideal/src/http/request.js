@@ -3,8 +3,8 @@ import { useAuthStore } from '@/store/authStore'
 
 export const request = function () {
     const auth = useAuthStore()
-    // axios.defaults.baseURL = 'http://192.168.1.12:8000/api';
-    axios.defaults.baseURL = 'http://localhost:8000/api';
+    axios.defaults.baseURL = 'http://192.168.1.12:8000/api';
+    // axios.defaults.baseURL = 'http://localhost:8000/api';
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + getToken();
     axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 

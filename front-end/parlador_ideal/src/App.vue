@@ -20,7 +20,7 @@ export default {
   },
   data() {
     return {
-      showSplashScreen: false,
+      showSplashScreen: true,
       userAuthenticated: false,
       request: request(),
     }
