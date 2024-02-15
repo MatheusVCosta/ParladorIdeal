@@ -14,6 +14,10 @@ class PostController extends Controller
     use Response;
     /**
      * Display a listing of the resource.
+     * 
+     * @param $request with values to filter query
+     * @api /api/posts/
+     * @method GET
      */
     public function showPosts(Request $request)
     {
@@ -35,6 +39,10 @@ class PostController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * 
+     * @param $request with the values to create a new post
+     * @api /api/posts/
+     * @method POST
      */
     public function store(Request $request)
     {
@@ -58,6 +66,10 @@ class PostController extends Controller
 
     /**
      * Display the specified resource.
+     * 
+     * @param $postId specified to search post
+     * @api /api/posts/myPost/{postId}
+     * @method GET
      */
     public function show(int $postId)
     {
@@ -75,6 +87,12 @@ class PostController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * 
+     * @param $postId specified to search post
+     * @param $request with values to updated
+     * 
+     * @api /api/posts/myPosts/{postId}
+     * @method PUT
      */
     public function update(Request $request, int $postId)
     {
@@ -96,6 +114,10 @@ class PostController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * 
+     * @param $postId specified to search post and delete
+     * @api /api/posts/myPosts/{postId}
+     * @method DELETE
      */
     public function destroy(int $postId)
     {
@@ -110,7 +132,12 @@ class PostController extends Controller
     }
 
     // PRIVATE METHODS
-
+    /**
+     * Validate params informed in request
+     * 
+     * @param $request 
+     * @param $rules 
+     */
     private function _validateRequest(Request $request, Array $rules)
     {
         $validator = Validator::make($request->all(), $rules);

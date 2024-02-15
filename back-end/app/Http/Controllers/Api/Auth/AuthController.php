@@ -14,6 +14,14 @@ class AuthController extends Controller
 {
     use Response;
 
+    /**
+     * Authenticate in api using email e password
+     * 
+     * @param $request contains the values to allow authenticate
+     * 
+     * @method POST
+     */
+
     public function login(AuthRequest $request)
     {
         $user = User::where('email', $request->email)->first();
@@ -34,6 +42,11 @@ class AuthController extends Controller
         return self::success(options: $options);
     }
 
+    /**
+     * Logout of api and delete token
+     * 
+     * @method POST
+     */
     public function logout()
     {
         $currentUser = Auth::user(); 
