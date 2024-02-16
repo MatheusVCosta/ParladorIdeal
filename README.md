@@ -160,7 +160,33 @@ Banco de dados - Mysql
   Então após isso basta acessar  https://localhost:5173
   Recomendo rodar a aplicação usando o "modo de desenvolvimento responsivo" do navegador pois foi tudo desenvolvido pensando em uma aplicação mobile
 
-Como o aplicativo tem bastamte tela, aqui tem um zip com os prints da aplicativo
-[Prints.zip](https://github.com/MatheusVCosta/ParladorIdeal/files/14303331/Prints.zip)
 
+Quando abrir o app, a primeira tela será a de Login
+
+Usuário: test@example.com
+
+Senha: 123
+
+### Login
+
+![Captura de tela de 2024-02-14 16-06-58](https://github.com/MatheusVCosta/ParladorIdeal/assets/38003078/15c6eec0-694d-44fb-bbee-601d39c7d3a4)
+
+Sinta-se livre para criar um novo usuário, basta clicar em 'Registrar-se'
+
+### Register
+
+![Captura de tela de 2024-02-15 04-10-07](https://github.com/MatheusVCosta/ParladorIdeal/assets/38003078/c0d55d7d-eb3d-4a77-8de3-441aff219412)
+
+Se tudo correr bem, você será redirecionado para a home:
+
+### Home
+
+![Captura de tela de 2024-02-15 04-10-31](https://github.com/MatheusVCosta/ParladorIdeal/assets/38003078/db2b971c-0f93-4cb3-9e05-f2903d574f9f)
+
+Na Home é listado os posts feitos por outros usuários, sendo o primeiro o mais recente
+
+![image](https://github.com/MatheusVCosta/ParladorIdeal/assets/38003078/09325595-02f4-4364-b425-ef9905059964)
+
+
+<p align="center">DevelopedBy@MathusVCosta</p>
 
