@@ -107,7 +107,6 @@
                     }
 
                 }).catch(error => {
-
                     if (!!error.response.data.errors) {
                         this.messageModalArr= []
                         Object.entries(error.response.data.errors).forEach(error => {

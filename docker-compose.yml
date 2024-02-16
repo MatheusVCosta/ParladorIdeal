@@ -1,3 +1,4 @@
+version: "3.9"
 volumes:
   node_modules:
   db_data:
@@ -11,7 +12,12 @@ services:
     ports:
       - 5173:5173
     environment:
-      - VITE_BACKEND_URL=http://localhost:8181/api
+      - VITE_BACKEND_URL=http://172.24.2.1:8181/api
+    depends_on:
+      - backend
+    networks:
+        appNetwork:
+          ipv4_address: 172.24.2.3
   backend:
     build: 
       context: ./back-end
@@ -25,18 +31,31 @@ services:
       - DB_USERNAME=root
       - DB_PASSWORD=parlador
       - APP_ENV=local
-
+    networks:
+        appNetwork:
+          ipv4_address: 172.24.2.1
     depends_on:
       db:
         condition: service_healthy
   db:
+    container_name: mysql
     image: mysql
     environment:
       - MYSQL_ROOT_PASSWORD=parlador
       - MYSQL_DATABASE=parlador
+    networks:
+      appNetwork:
+        ipv4_address: 172.24.2.2
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       start_period: 5s
       interval: 5s
       timeout: 5s
       retries: 20
+networks:
+    appNetwork:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: "172.24.2.0/16"
